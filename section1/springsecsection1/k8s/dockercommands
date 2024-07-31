@@ -1,0 +1,6 @@
+# this file contains sample docker commands to build docker image, update the versions according to current version while building new image
+
+
+sudo docker image build --network host -t ndl-spsec .
+sudo docker tag ndl-spsec rtx-swtl-nexus.fnc.net.local/ndl/ndl-spsec:1.1
+sudo docker push rtx-swtl-nexus.fnc.net.local/ndl/ndl-spsec:1.1

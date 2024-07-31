@@ -1,0 +1,29 @@
+apiVersion: v1
+data:
+  application.yaml: "es:\n   url: http://ndl-elasticsearch-coordinating-hl:9200\n
+    \  ttl.in.min: 525600\n   columnName: lastupdatelagunadatetime\n   partialsearch.query:
+    false\ndatastore: \n   alarm: alarmstore\n   event: eventstore\n   topology: topologystore\n
+    \  default.ttl.in.secs: 2628000\n   default.ttl.in.min: 2628000\n   default.ttl.in.secs.cdc:
+    31536000\nkafka:\n   connect: \n    url: ndl-cp-kafka-connect:8083\n    source.class:
+    com.datamountaineer.streamreactor.connect.cassandra.source.CassandraSourceConnector\n
+    \   sink.class: com.datamountaineer.streamreactor.connect.cassandra.sink.CassandraSinkConnector\n
+    \   cassandra:\n     import.poll.interval: 1000\n     task.max:  20\n    batch.size:
+    500\n    read.timeout.ms: 60000\n   producer:\n    bootstrap-servers: ndl-cp-kafka.ndl:9092\n
+    \  topicStore: \n    partitions: 20\n    retention: \n     ms: 604800000\n     bytes:
+    1073741824\n    segment:\n     ms: 259200000\n     bytes: 2147483648\n    replicas:
+    3\n   topicCdc:\n    partitions: 8\n    retention:\n     ms: 604800000\n     bytes:
+    1073741824\n    segment:\n     ms: 259200000\n     bytes: 2147483648\n    replicas:
+    3\nschema:\n   registry:\n    url: http://ndl-cp-schema-registry.ndl:8081\nspring:
+    \n   elasticsearch:\n    rest:\n     uris: ndl-elasticsearch-coordinating-hl:9200\n
+    \  kafka:\n    bootstrap-servers: ndl-cp-kafka.ndl:9092\nschedule:\n  cron: 0
+    0 0 * * *\nkeycloak:\n  api: \"api\"\n  url: \"url\"\n  clientid: \"test\"\nserver:\n
+    \ tomcat:\n    threads:\n      max: 1000"
+kind: ConfigMap
+metadata:
+  annotations:
+    meta.helm.sh/release-name: ndl
+    meta.helm.sh/release-namespace: ndl
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: ndl-datastore-config
+  namespace: ndl

@@ -1,0 +1,65 @@
+apiVersion: v1  
+data: 
+   application.yaml: |-
+    REST_SECURITY_ISSUERURI: http://keycloak-keycloak.router.default.svc.cluster.local.167.254.203.165.nip.io/auth/realms/FUMS
+    SECURITY_OAUTH2_CLIENT_CLIENTSECRET: 0f7d3d8e-fcbb-4650-a139-6f85b01f259f
+    es:
+     url: http://ndl-elasticsearch-coordinating-hl:9200
+     ttl.in.min: 525600
+     columnName: lastupdatelagunadatetime
+     partialsearch.query: false
+    datastore: 
+     alarm: alarmstore
+     event: eventstore
+     topology: topologystore
+     default.ttl.in.min: 31536000
+     default.ttl.in.secs: 31536000
+     default.ttl.in.secs.cdc: 31536000
+    kafka:
+     connect: 
+      url: http://ndl-cp-kafka-connect:8083
+      source.class: com.datamountaineer.streamreactor.connect.cassandra.source.CassandraSourceConnector
+      sink.class: com.datamountaineer.streamreactor.connect.cassandra.sink.CassandraSinkConnector
+      cassandra:
+       import.poll.interval: 1000
+       task.max: 10
+      batch.size: 500 
+      read.timeout.ms: 60000
+     producer:
+      bootstrap-servers: ndl-cp-kafka.ndl:9092
+     topicStore:
+      partitions: 20
+      retention:
+        ms: 259200000
+        bytes: 3221225472
+      replicas: 3
+      segment:
+        ms: 259200000
+     topicCdc:
+      partitions: 8
+      retention:
+        ms: 259200000
+        bytes: 3221225472
+      replicas: 3
+      segment:
+        ms: 259200000
+    schema:
+     registry:
+      url: http://ndl-cp-schema-registry:8081
+    spring: 
+     elasticsearch:
+      rest:
+       uris: ndl-elasticsearch-coordinating-hl:9200
+     kafka:
+      bootstrap-servers: ndl-cp-kafka.ndl:9092
+    schedule:
+     cron: "0 0 0 * * *"
+    server:
+      tomcat:
+        threads:
+          max: 1000
+kind: ConfigMap 
+metadata: 
+        name: ndl-datastore-config 
+        namespace: ndl
+
